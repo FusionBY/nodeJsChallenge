@@ -1,19 +1,19 @@
 import fs from 'fs';
 
 export default class DirWatcher {
-	constructor(path, delay, eventEmitter) {
+	constructor (path, delay, eventEmitter) {
 		this.watchedFiles = [];
 		this.eventEmitter = eventEmitter;
 		this.watch(path, delay);
 	}
 
-	watch(dirPath, delay) {
+	watch (dirPath, delay) {
 		const watchInterval = (callback) => setInterval(callback, delay);
-		const checkFolder = () => fs.readdir(dirPath, (err, watchingFiles) => {
+		const checkFolder = () =>
+			fs.readdir(dirPath, (err, watchingFiles) => {
 				if (err) {
-					throw err;
+					throw new Error(err);
 				}
-				let count = 0;
 
 				watchingFiles.forEach((fileName) => {
 					if (fileName.indexOf('csv') === -1) {
@@ -42,6 +42,5 @@ export default class DirWatcher {
 			});
 
 		watchInterval(checkFolder);
-
 	}
 }

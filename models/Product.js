@@ -1,5 +1,5 @@
 export default class Product {
-	constructor() {
+	constructor () {
 		console.log('Product module');
 	}
 }

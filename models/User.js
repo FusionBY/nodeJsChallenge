@@ -1,5 +1,5 @@
 export default class User {
-	constructor() {
+	constructor () {
 		console.log('User module');
 	}
 }

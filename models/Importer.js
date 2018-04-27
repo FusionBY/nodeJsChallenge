@@ -9,19 +9,19 @@ export default class Importer {
 	import (path) {
 		return new Promise((resolve) => {
 			csv()
-			.fromFile(path)
-			.on('json', (jsonObj) => {
-				resolve(this.emitData(jsonObj));
-			});
+				.fromFile(path)
+				.on('json', (jsonObj) => {
+					resolve(this.emitData(jsonObj));
+				});
 		});
 	}
 
 	importSync (path) {
 		return csv()
-		.fromFile(path)
-		.on('json', (jsonObj) => {
-			return this.emitData(jsonObj);
-		});
+			.fromFile(path)
+			.on('json', (jsonObj) => {
+				return this.emitData(jsonObj);
+			});
 	}
 
 	emitData (promise) {
