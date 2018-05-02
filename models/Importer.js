@@ -1,4 +1,5 @@
-import csv from 'csvtojson';
+import parseCSV from '../helpers/parseCSV';
+import fs from 'fs';
 
 export default class Importer {
 	constructor (eventEmitter) {
@@ -7,21 +8,20 @@ export default class Importer {
 	}
 
 	import (path) {
-		return new Promise((resolve) => {
-			csv()
-				.fromFile(path)
-				.on('json', (jsonObj) => {
-					resolve(this.emitData(jsonObj));
-				});
+		fs.readFile(path, (err, data) => {
+			if (err) {
+				throw new Error();
+			}
+
+			const jsonObj = parseCSV(data);
+			this.emitData(jsonObj);
 		});
 	}
 
 	importSync (path) {
-		return csv()
-			.fromFile(path)
-			.on('json', (jsonObj) => {
-				return this.emitData(jsonObj);
-			});
+		const data = fs.readFileSync(path);
+		const jsonObj = parseCSV(data);
+		this.emitData(jsonObj);
 	}
 
 	emitData (promise) {
