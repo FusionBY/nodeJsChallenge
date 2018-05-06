@@ -1,4 +1,4 @@
-import EventEmitter from 'eventemitter2';
+import EventEmitter from 'events';
 const eventEmitter = new EventEmitter();
 
 import * as config from './config';

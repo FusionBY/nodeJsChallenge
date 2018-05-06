@@ -22,6 +22,8 @@ export default class DirWatcher {
 
 					const lastModified = fs.statSync(`${dirPath}/${fileName}`).mtime.getTime();
 					const matchedFile = this.watchedFiles.find(({ name }) => name === fileName);
+					const filePath = `${dirPath}/${fileName}`;
+
 					let matchedFileIndex;
 					if (matchedFile) {
 						matchedFileIndex = this.watchedFiles.findIndex(({ name }) => name === fileName);
@@ -35,7 +37,6 @@ export default class DirWatcher {
 						} else {
 							this.watchedFiles.push(newFile);
 						}
-						const filePath = `${dirPath}/${fileName}`;
 						return this.eventEmitter.emit('dirWathcer:changed', filePath);
 					}
 				});
