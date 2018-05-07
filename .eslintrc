@@ -1,0 +1,88 @@
+{
+	"env": {
+		"browser": true,
+		"es6": true,
+		"node": true,
+		"jest": true
+	},
+	"globals": {
+		"devServer": false
+	},
+	"extends": ["eslint:recommended", "prettier"],
+	"parser": "babel-eslint",
+	"rules": {
+		"indent": [
+			"error",
+			"tab",
+			{
+				"SwitchCase": 1
+			}
+		],
+		"space-before-function-paren": [
+			"warn",
+			{
+				"anonymous": "always",
+				"named": "always",
+				"asyncArrow": "always"
+			}
+		],
+		"keyword-spacing": [
+			"error",
+			{
+				"before": true,
+				"after": true
+			}
+		],
+		"linebreak-style": ["error", "unix"],
+		"quotes": ["error", "single"],
+		"semi": ["error", "always"],
+		"curly": ["warn", "multi-line"],
+		"brace-style": "warn",
+		"comma-dangle": ["warn", "always-multiline"],
+		"comma-spacing": [
+			"warn",
+			{
+				"before": false,
+				"after": true
+			}
+		],
+		"space-before-blocks": "warn",
+		"object-curly-spacing": ["warn", "always"],
+		"space-infix-ops": [
+			"warn",
+			{
+				"int32Hint": false
+			}
+		],
+		"no-class-assign": "off",
+		"no-console": "warn",
+		"no-extra-bind": "warn",
+		"prefer-arrow-callback": "error",
+		"no-debugger": "warn",
+		"no-unused-vars": "warn",
+		"key-spacing": "warn",
+		"prefer-destructuring": [
+			"warn",
+			{
+				"array": true,
+				"object": true
+			},
+			{
+				"enforceForRenamedProperties": false
+			}
+		],
+		"arrow-parens": ["warn", "always"],
+		"no-useless-constructor": "warn",
+		"max-len": [
+			"warn",
+			{
+				"code": 120,
+				"ignoreStrings": true,
+				"ignoreComments": true,
+				"ignoreTemplateLiterals": true
+			}
+		],
+		"operator-linebreak": ["warn", "before"],
+		"prefer-const": "warn"
+	}
+}
