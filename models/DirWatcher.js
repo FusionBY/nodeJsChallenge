@@ -20,9 +20,9 @@ export default class DirWatcher {
 						return;
 					}
 
-					const lastModified = fs.statSync(`${dirPath}/${fileName}`).mtime.getTime();
-					const matchedFile = this.watchedFiles.find(({ name }) => name === fileName);
 					const filePath = `${dirPath}/${fileName}`;
+					const lastModified = fs.statSync(filePath).mtime.getTime();
+					const matchedFile = this.watchedFiles.find(({ name }) => name === fileName);
 
 					let matchedFileIndex;
 					if (matchedFile) {
