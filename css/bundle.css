@@ -1,4 +1,10 @@
-.ngmp18 {
+body {
+	background-color: yellow;
+}body {
+	background-color: red;
+}body {
+	background-color: black;
+}.ngmp18 {
   background-color: #fff;
   overflow: hidden;
   width: 100%;
@@ -12,11 +18,4 @@
 
 .ngmp18__hw3--t7 {
   font-weight: bold;
-}
-body {
-	background-color: yellow;
-}body {
-	background-color: red;
-}body {
-	background-color: black;
 }

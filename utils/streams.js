@@ -4,20 +4,24 @@
 // node ./utils/streams.js --action=outputFile -f=./data.test.csv
 // node ./utils/streams.js --action=buildCSS -p=./css
 
-
 const csvParser = require('csv-parser');
 const fs = require('fs');
+const path = require('path');
 const through2 = require('through2');
+const minimistArgv = require('minimist')(process.argv.slice(2), {
+	alias: { action: 'a', file: 'f', path: 'p', help: 'h' },
+});
 
+const csv = '.csv';
 const cyan = '\x1b[36m%s\x1b[0m';
 const redError = '\x1b[41m%s\x1b[0m';
 const actions = {
-	reverse: { action: reverse, msg: '\nType text for revese: ' },
-	transform: { action: transform, msg: '\nType text for transform: ' },
-	outputFile: { action: outputFile, msg: '\nRead stream working...\n' },
-	convertFromFile: { action: convertFromFile, msg: '\nConvert from csv working...\n' },
-	convertToFile: { action: convertToFile, msg: '\nConvert from csv to file working...\n' },
-	buildCSS: { action: buildCSS, msg: '\nCSS starts building...\n' },
+	reverse: { cb: reverse, msg: '\nType text for revese: ' },
+	transform: { cb: transform, msg: '\nType text for transform: ' },
+	outputFile: { cb: outputFile, msg: '\nRead stream working...\n' },
+	convertFromFile: { cb: convertFromFile, msg: '\nConvert from csv working...\n' },
+	convertToFile: { cb: convertToFile, msg: '\nConvert from csv to file working...\n' },
+	buildCSS: { cb: buildCSS, msg: '\nCSS starts building...\n' },
 };
 
 function fileExistMiddlware (filePath, callback) {
@@ -35,50 +39,45 @@ function fileExistMiddlware (filePath, callback) {
 }
 
 (() => {
-	let actionName, filePath, dirPath;
-	const args = process.argv.slice(2);
-	const firstArg = args[0] && args[0].search(/--help|-h/);
+	const { action, file, path } = minimistArgv;
+	const [first] = process.argv.slice(2);
+	const firstIsHelp = first && first.search(/--help|-h/);
 
-	if (firstArg !== -1) {
-		if (!firstArg) {
+	if (firstIsHelp !== -1) {
+		if (!firstIsHelp) {
 			console.log('******* You should send at least one argument! *******');
 		}
 		return console.log('******* HELP ******* \n ** Message **');
 	}
 
-	process.argv.forEach((arg) => {
-		if (arg.search(/--action|-a/) !== -1) {
-			return ([, actionName] = arg.split('='));
-		}
-		if (arg.search(/--file|-f/) !== -1) {
-			return ([, filePath] = arg.split('='));
-		}
-		if (arg.search(/--path|-p/) !== -1) {
-			return ([, dirPath] = arg.split('='));
-		}
-	});
+	const { cb, msg } = actions[action];
 
-	if (!actions[actionName]) {
-		return console.log('*** Action not found ***');
+	if (!cb) {
+		return console.log('*** action not found ***');
 	}
 
-	const { action, msg } = actions[actionName];
 	console.log(cyan, msg);
-	action && fileExistMiddlware(dirPath || filePath, action);
+	cb && fileExistMiddlware(file || path, cb);
 })();
 
 function reverse () {
-	process.stdin.on('data', (str) => {
-		process.stdout.write(
-			str
-				.toString()
-				.split('')
-				.reverse()
-				.join('')
+	process.stdin
+		.pipe(
+			through2((chunk, enc, next) => {
+				const str = chunk
+					.toString()
+					.split('')
+					.reverse()
+					.join('');
+				next(null, str);
+			})
+		)
+		.pipe(
+			through2((str) => {
+				process.stdout.write(str + '\n');
+				process.exit();
+			})
 		);
-		process.stdout.write('\n');
-		process.exit();
-	});
 }
 
 function transform () {
@@ -113,51 +112,82 @@ function outputFile (filePath) {
 				}
 			)
 		)
-		.on('data', (data) => console.log(data.toString()));
+		.pipe(process.stdout);
 }
 
 function convertFromFile (filePath) {
-	if (!filePath.search(/\.csv$/) === -1) {
-		console.log(redError, '\nPlease check file extension.\n');
+	const json = {};
+
+	if (path.extname(filePath) !== csv) {
+		throw new Error('\nPlease check file extension.\n');
 	}
 	fs
 		.createReadStream(filePath)
 		.pipe(csvParser())
-		.on('data', function (data) {
-			console.log(data);
-		})
-		.on('end', () => console.log(cyan, '\n>>> Stream reading end. <<<\n'));
+		.pipe(
+			through2.obj(function (chunk, enc, next) {
+				for (const title in chunk) {
+					if (title === null) return;
+					if (!json[title]) json[title] = [];
+
+					json[title].push(chunk[title]);
+				}
+				next(null, chunk);
+			})
+		)
+		.on('finish', () => console.log(json));
 }
 
 function convertToFile (filePath) {
-	if (!filePath.search(/\.csv$/) === -1) {
-		console.log(redError, '\nPlease check file extension.\n');
+	if (path.extname(filePath) !== csv) {
+		throw new Error('\nPlease check file extension.\n');
 	}
 
 	const writeStream = fs.createWriteStream(filePath.replace(/\.csv$/, '.json'));
+
+	const json = {};
+
 	fs
 		.createReadStream(filePath)
 		.pipe(csvParser())
-		.on('data', function (data) {
-			writeStream.write(JSON.stringify(data) + '\n');
-		})
-		.on('end', () => console.log(cyan, '\n>>> Stream reading end. <<<\n'));
+		.pipe(
+			through2.obj(function (chunk, enc, next) {
+				for (const title in chunk) {
+					if (title === null) return;
+					if (!json[title]) json[title] = [];
+
+					json[title].push(chunk[title]);
+				}
+				next(null, chunk);
+			})
+		)
+		.on('finish', () => writeStream.write(JSON.stringify(json)));
 }
 
-
-// all files reads parallel?
-// Can css become invalid becouse bundle will be write like:
-// body { (#fistFile) body{ background: red (#secondFile) ??
-
 function buildCSS (dirPath) {
-	const cssArr = fs.readdirSync(dirPath);
 	const writeStream = fs.createWriteStream(dirPath + '/bundle.css');
 
-	cssArr.forEach((filePath) => {
-		fs.createReadStream(dirPath + '/' + filePath)
-			.on('data', function (data) {
-				writeStream.write(data);
-			})
-			.on('end', () => console.log(cyan, '\n>>> Stream reading end. <<<'));
+	writeStream.on('open', () => {
+		fs
+			.readdirSync(dirPath)
+			.map((path) => dirPath + '/' + path)
+			.filter((path) => fs.statSync(path).size)
+			.forEach((filePath) => {
+				if (filePath.indexOf('nodejs-homework3.css') !== -1) {
+					return setImmediate(() => readStream(filePath));
+				}
+				readStream(filePath);
+			});
 	});
+
+	writeStream.on('finish', function () {
+		console.log(' ---- Writing end ----');
+	});
+
+	function readStream (readPath) {
+		const readStream = fs
+			.createReadStream(readPath)
+			.on('end', () => console.log(`Stream read end... [${readPath}]`));
+		readStream.pipe(writeStream);
+	}
 }

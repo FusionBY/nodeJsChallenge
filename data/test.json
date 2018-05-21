@@ -1,3 +1,1 @@
-{"AAAA":"10","BBBB":"20","CCCC":"30"}
-{"AAAA":"","BBBB":" 40, hello world ","CCCC":"60"}
-{"AAAA":"80","BBBB":"80","CCCC":"90"}
+{"AAAA":["10","","80"],"BBBB":["20"," 40, hello world ","80"],"CCCC":["30","60","90"]}
