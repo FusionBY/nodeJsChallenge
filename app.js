@@ -6,9 +6,9 @@ import { Product, User, DirWatcher, Importer } from './models';
 
 console.log('config-name:', config.name);
 
-const user = new User();
-const product = new Product();
-const dirWatcher = new DirWatcher('data', 3000, eventEmitter);
-const importer = new Importer(eventEmitter);
+new User();
+new Product();
+new DirWatcher('data', 30000, eventEmitter);
+new Importer(eventEmitter);
 
 eventEmitter.on('log:data', (data) => console.log(data));
