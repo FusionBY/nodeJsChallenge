@@ -69,15 +69,10 @@ function reverse () {
 					.split('')
 					.reverse()
 					.join('');
-				next(null, str);
+				next(null, str + '\n');
 			})
 		)
-		.pipe(
-			through2((str) => {
-				process.stdout.write(str + '\n');
-				process.exit();
-			})
-		);
+		.pipe(process.stdout);
 }
 
 function transform () {
@@ -116,7 +111,7 @@ function outputFile (filePath) {
 }
 
 function convertFromFile (filePath) {
-	const json = {};
+	const json = [];
 
 	if (path.extname(filePath) !== csv) {
 		throw new Error('\nPlease check file extension.\n');
@@ -126,12 +121,7 @@ function convertFromFile (filePath) {
 		.pipe(csvParser())
 		.pipe(
 			through2.obj(function (chunk, enc, next) {
-				for (const title in chunk) {
-					if (title === null) return;
-					if (!json[title]) json[title] = [];
-
-					json[title].push(chunk[title]);
-				}
+				json.push(chunk);
 				next(null, chunk);
 			})
 		)
@@ -144,20 +134,14 @@ function convertToFile (filePath) {
 	}
 
 	const writeStream = fs.createWriteStream(filePath.replace(/\.csv$/, '.json'));
-
-	const json = {};
+	const json = [];
 
 	fs
 		.createReadStream(filePath)
 		.pipe(csvParser())
 		.pipe(
 			through2.obj(function (chunk, enc, next) {
-				for (const title in chunk) {
-					if (title === null) return;
-					if (!json[title]) json[title] = [];
-
-					json[title].push(chunk[title]);
-				}
+				json.push(chunk);
 				next(null, chunk);
 			})
 		)
