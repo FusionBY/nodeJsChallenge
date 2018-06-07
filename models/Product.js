@@ -1,5 +1,6 @@
 export default class Product {
-	constructor () {
-		console.log('Product module');
+	constructor (id = Date.now(), reviews = {}) {
+		this._id = id;
+		this.reviews = reviews;
 	}
 }

@@ -4,18 +4,24 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "nodemon ./app.js --exec babel-node",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "PORT=3050 nodemon ./index.js --exec babel-node",
+    "html-server": "nodemon ./http-servers/html-server --exec babel-node",
+    "json-server": "nodemon ./http-servers/json-server --exec babel-node",
+    "plain-text-server": "nodemon ./http-servers/plain-text-server --exec babel-node",
+    "echo-server": "nodemon ./http-servers/echo-server --exec babel-node",
+    "test": "jest"
   },
   "keywords": [],
   "author": "Yahor Dauhaliuk",
   "license": "ISC",
   "dependencies": {
     "babel-core": "^6.26.0",
+    "babel-plugin-module-resolver": "^3.1.1",
     "babel-preset-env": "^1.6.1",
     "babel-preset-stage-2": "^6.24.1",
     "babel-register": "^6.26.0",
     "csv-parser": "^1.12.1",
+    "express": "^4.16.3",
     "minimist": "^1.2.0",
     "nodemon": "^1.17.3",
     "through2": "^2.0.3"
@@ -25,6 +31,7 @@
     "babel-eslint": "^8.2.3",
     "eslint": "^4.19.1",
     "eslint-config-prettier": "^2.9.0",
+    "jest": "^23.1.0",
     "prettier-eslint-cli": "^4.7.1"
   }
 }
