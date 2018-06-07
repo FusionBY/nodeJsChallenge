@@ -10,6 +10,9 @@ const customParser = (url) => {
 };
 
 export default (req, res, next) => {
+	if (req.query) {
+		return next();
+	}
 	const { url } = req;
 	req.parsedQuery = customParser(url);
 	next();

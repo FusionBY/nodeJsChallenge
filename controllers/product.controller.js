@@ -3,6 +3,11 @@ import through2 from 'through2';
 import Product from 'models/Product';
 
 const dataPath = 'data/fakeDataBase.js';
+
+const _getProduct = (data, id) => {
+	return data.products.find((product) => product.id === parseInt(id, 10)) || {};
+};
+
 export default {
 	getAll (req, res) {
 		fs
@@ -23,7 +28,7 @@ export default {
 			.pipe(
 				through2((chunk, enc, next) => {
 					const parsedData = JSON.parse(chunk.toString());
-					next(null, JSON.stringify(parsedData.products[id] || {}));
+					next(null, JSON.stringify(_getProduct(parsedData, id)));
 				})
 			)
 			.pipe(res);
@@ -36,7 +41,7 @@ export default {
 			.pipe(
 				through2((chunk, enc, next) => {
 					const parsedData = JSON.parse(chunk.toString());
-					const productById = parsedData.products[id];
+					const productById = _getProduct(parsedData, id);
 					const reviews = productById && productById.reviews;
 					next(null, JSON.stringify(reviews || {}));
 				})

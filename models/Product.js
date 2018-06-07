@@ -1,6 +1,7 @@
+import crypto from 'crypto';
 export default class Product {
-	constructor (id = Date.now(), reviews = {}) {
-		this._id = id;
+	constructor (reviews = {}) {
+		this._id = crypto.randomBytes(10).toString('hex');
 		this.reviews = reviews;
 	}
 }
