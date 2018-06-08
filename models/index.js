@@ -1,6 +1,4 @@
-import Product from './Product';
-import User from './User';
-import DirWatcher from './DirWatcher';
-import Importer from './Importer';
+import Product from '../models//Product';
+import User from '../models//User';
 
-export { Product, User, DirWatcher, Importer };
+export { Product, User };

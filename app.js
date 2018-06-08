@@ -1,14 +1,14 @@
-import EventEmitter from 'events';
-const eventEmitter = new EventEmitter();
+import express from 'express';
 
-import * as config from './config';
-import { Product, User, DirWatcher, Importer } from './models';
+import routes from './routes';
+import middlewares from './middlewares';
 
-console.log('config-name:', config.name);
+const app = express();
+middlewares(app);
+routes(app);
 
-new User();
-new Product();
-new DirWatcher('data', 30000, eventEmitter);
-new Importer(eventEmitter);
+app.get('/', function (req, res) {
+	res.send(JSON.stringify(req.parsedQuery || 'You can add some query to url'));
+});
 
-eventEmitter.on('log:data', (data) => console.log(data));
+export default app;

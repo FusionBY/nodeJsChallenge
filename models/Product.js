@@ -1,5 +1,7 @@
+import crypto from 'crypto';
 export default class Product {
-	constructor () {
-		console.log('Product module');
+	constructor (reviews = {}) {
+		this._id = crypto.randomBytes(10).toString('hex');
+		this.reviews = reviews;
 	}
 }
