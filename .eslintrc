@@ -6,7 +6,8 @@
 		"jest": true
 	},
 	"globals": {
-		"devServer": false
+		"devServer": false,
+		"logger": false
 	},
 	"extends": ["eslint:recommended", "prettier"],
 	"parser": "babel-eslint",
@@ -59,7 +60,7 @@
 		"no-extra-bind": "warn",
 		"prefer-arrow-callback": "off",
 		"no-debugger": "warn",
-		"no-unused-vars": "warn",
+		"no-unused-vars": ["warn", { "varsIgnorePattern": "logger" }],
 		"key-spacing": "warn",
 		"prefer-destructuring": [
 			"warn",

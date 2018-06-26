@@ -1,7 +1,14 @@
-import crypto from 'crypto';
-export default class Product {
-	constructor (reviews = {}) {
-		this._id = crypto.randomBytes(10).toString('hex');
-		this.reviews = reviews;
-	}
-}
+export default (sequelize, DataTypes) => {
+	var product = sequelize.define(
+		'product',
+		{
+			productName: DataTypes.STRING,
+			reviews: DataTypes.STRING,
+		},
+		{}
+	);
+	product.associate = function (models) {
+		// associations can be defined here
+	};
+	return product;
+};

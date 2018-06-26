@@ -1,56 +1,44 @@
-import fs from 'fs';
-import through2 from 'through2';
-import Product from 'models/Product';
-
-const dataPath = 'data/fakeDataBase.js';
-
-const _getProduct = (data, id) => {
-	return data.products.find((product) => product.id === parseInt(id, 10)) || {};
-};
+import models from 'models';
 
 export default {
-	getAll (req, res) {
-		fs
-			.createReadStream(dataPath)
-			.pipe(
-				through2((chunk, enc, next) => {
-					const parsedData = JSON.parse(chunk.toString());
-					next(null, JSON.stringify(parsedData.products));
-				})
-			)
-			.pipe(res);
+	async getAll (req, res) {
+		try {
+			const products = await models.product.findAll({ raw: true });
+			res.status(200).json({
+				status: 200,
+				products,
+			});
+		} catch (error) {
+			logger.log(error);
+			res.status(500).json({
+				status: 500,
+				data: '',
+				message: 'Something went wrong',
+			});
+		}
 	},
 
-	getById (req, res) {
-		const { id } = req.params;
-		fs
-			.createReadStream(dataPath)
-			.pipe(
-				through2((chunk, enc, next) => {
-					const parsedData = JSON.parse(chunk.toString());
-					next(null, JSON.stringify(_getProduct(parsedData, id)));
-				})
-			)
-			.pipe(res);
-	},
+	async addProduct (req, res) {
+		const { productName } = req.body;
 
-	getReviewsById (req, res) {
-		const { id } = req.params;
-		fs
-			.createReadStream(dataPath)
-			.pipe(
-				through2((chunk, enc, next) => {
-					const parsedData = JSON.parse(chunk.toString());
-					const productById = _getProduct(parsedData, id);
-					const reviews = productById && productById.reviews;
-					next(null, JSON.stringify(reviews || {}));
-				})
-			)
-			.pipe(res);
-	},
-
-	addProduct (req, res) {
-		const newProduct = new Product();
-		res.send(newProduct);
+		const newProduct = models.product.build({
+			productName,
+			reviews: '',
+		});
+		logger.log(newProduct);
+		try {
+			const product = await newProduct.save();
+			logger.log(product);
+			res.status(200).json({
+				code: 200,
+				product,
+			});
+		} catch (err) {
+			res.status(500).json({
+				code: 500,
+				message: 'Something went wrong',
+				err,
+			});
+		}
 	},
 };

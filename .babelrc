@@ -6,7 +6,10 @@
       "alias": {
         "models": "./models",
         "controllers": "./controllers",
-        "data": "./data",
+		"data": "./data",
+		"utils": "./utils",
+		"service": "./service",
+		"config": "./config"
       }
     }]
   ]
