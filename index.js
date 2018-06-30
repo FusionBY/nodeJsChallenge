@@ -1,8 +1,11 @@
 import app from './app';
-import models from './models';
+import databaseSwitcher from './utils/databaseSwitcher';
+import config from 'config';
 
 const port = process.env.PORT || 8080;
 
-models.sequelize.sync().then(() => {
-	app.listen(port, () => logger.log(`App listening on port ${port}!`));;
+databaseSwitcher(config.database).then(() => {
+	app.listen(port, () => {
+		logger.log(`App listening on port ${port}!`);
+	});
 });

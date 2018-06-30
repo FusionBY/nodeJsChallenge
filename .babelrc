@@ -4,7 +4,12 @@
     ["module-resolver", {
       "root": ["./"],
       "alias": {
-        "models": "./models",
+		"mongo": "./mongo",
+		"postgres": "./postgres",
+        "models": "./postgres/models",
+        "postgres-models": "./postgres/models",
+        "postgres-controllers": "./postgres/controllers",
+        "mongo-controllers": "./mongo/controllers",
         "controllers": "./controllers",
 		"data": "./data",
 		"utils": "./utils",
