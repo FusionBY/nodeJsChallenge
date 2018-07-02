@@ -11,6 +11,7 @@ export default (req, res, next) => {
 		}
 		if (user) {
 			req.user = user;
+			req.user.refreshToken = info.token;
 			next();
 		}
 	})(req, res, next);

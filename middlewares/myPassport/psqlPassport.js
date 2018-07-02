@@ -51,9 +51,6 @@ const initPassport = () => {
 				callbackURL: 'http://localhost:3050/api/auth/facebook',
 			},
 			(accessToken, refreshToken, profile, cb) => {
-				// User.findOrCreate({ facebookId: profile.id }, function (err, user) {
-				// 	return cb(err, user);
-				// });
 				cb(null, profile);
 			}
 		)

@@ -11,15 +11,21 @@ class TokenService {
 		return jwt.sign(payload, config.secret, { expiresIn: config.refTokenLife });
 	}
 
-	async getRefreshId () {
+	async getNewRefreshId () {
 		return await crypto.randomBytes(5).toString('hex');
 	}
 
-	async getTokens (payload) {
+	async getTokens (payload, refreshId) {
+		if (!payload.username || !payload.id) {
+			throw new Error('Check getTokens interface');
+		}
+		if (!refreshId) {
+			refreshId =  await this.getNewRefreshId();
+		};
 		return {
 			access: this.getAccessToken(payload),
-			refresh: this.getRefreshToken(payload),
-			refreshId: await this.getRefreshId(),
+			refresh: this.getRefreshToken({ ...payload, refreshId }),
+			refreshId,
 		};
 	}
 }

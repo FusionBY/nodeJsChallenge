@@ -10,6 +10,7 @@
         "postgres-models": "./postgres/models",
         "postgres-controllers": "./postgres/controllers",
         "mongo-controllers": "./mongo/controllers",
+        "mongoose-models": "./mongo/models",
         "controllers": "./controllers",
 		"data": "./data",
 		"utils": "./utils",

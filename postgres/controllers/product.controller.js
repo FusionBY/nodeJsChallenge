@@ -9,7 +9,6 @@ export default {
 				products,
 			});
 		} catch (error) {
-			logger.log(error);
 			res.status(500).json({
 				status: 500,
 				data: '',
