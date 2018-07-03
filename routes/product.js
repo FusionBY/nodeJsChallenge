@@ -1,15 +1,14 @@
 import { Router } from 'express';
 import controllers from 'controllers';
-import isAuth from 'middlewares/isAuth';
 import lastModifiedDate from 'middlewares/lastModifiedDate';
 
 const router = Router();
 
 router
-	.get('/', isAuth, controllers.getIn('product', 'getAll'))
-	.get('/:id', isAuth, controllers.getIn('product', 'getById'))
-	.get('/:id/reviews', isAuth, controllers.getIn('product', 'getReviewsById'))
-	.post('/', isAuth, lastModifiedDate, controllers.getIn('product', 'addProduct'))
-	.delete('/:id', isAuth, controllers.getIn('product', 'deleteById'));
+	.get('/', controllers.getIn('product', 'getAll'))
+	.get('/:id', controllers.getIn('product', 'getById'))
+	.get('/:id/reviews', controllers.getIn('product', 'getReviewsById'))
+	.post('/', lastModifiedDate, controllers.getIn('product', 'addProduct'))
+	.delete('/:id', controllers.getIn('product', 'deleteById'));
 
 export default router;
