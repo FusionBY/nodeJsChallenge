@@ -3,6 +3,7 @@ import signIn from './auth/signIn';
 import logout from './auth/logout';
 import refreshToken from './auth/refreshToken';
 import facebook from './auth/facebook';
+import google from './auth/google';
 import users from './users';
 import product from './product';
 import city from './city';
@@ -17,5 +18,6 @@ export default (app) => {
 	app.use('/api/users', isAuth, users);
 	app.use('/api/products', isAuth, product);
 	app.use('/api/auth/facebook', facebook);
+	app.use('/api/auth/google', google);
 	app.use('/api/city', city);
 };

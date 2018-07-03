@@ -1,6 +1,7 @@
 import passport from 'passport';
 import { Strategy as LocalStrategy } from 'passport-local';
 import { Strategy as JwtStrategy, ExtractJwt } from 'passport-jwt';
+import { Strategy as GoogleStrategy } from 'passport-google-oauth20';
 
 import UserModel from 'mongoose-models/user.model';
 
@@ -40,6 +41,19 @@ passport.use(
 			} catch (err) {
 				return cb(false, null, { message: 'Token expired.' });
 			}
+		}
+	)
+);
+
+passport.use(
+	new GoogleStrategy(
+		{
+			clientID: '1004263443248-oa6sg12k08tp9eau38914rp2p16h7gle.apps.googleusercontent.com',
+			clientSecret: 'MbYqTBfzyrpZ2Q4356PH4gi4',
+			callbackURL: 'http://localhost:3050/api/auth/google/callback',
+		},
+		(accessToken, refreshToken, profile, cb) => {
+			cb(null, profile);
 		}
 	)
 );

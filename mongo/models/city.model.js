@@ -5,9 +5,7 @@ const CitySchema = new Schema({
 	country: { type: String },
 	capital: {
 		type: Boolean,
-		required: function () {
-			return true;
-		},
+		required: true,
 	},
 	location: { type: Object },
 	lastModifiedDate: { type: Date },

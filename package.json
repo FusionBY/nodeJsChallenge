@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "PORT=3050 NODE_ENV=development nodemon ./index.js --exec babel-node",
+    "start": "PORT=3050 DB=mongo NODE_ENV=development nodemon ./index.js --exec babel-node",
     "html-server": "nodemon ./http-servers/html-server --exec babel-node",
     "json-server": "nodemon ./http-servers/json-server --exec babel-node",
     "plain-text-server": "nodemon ./http-servers/plain-text-server --exec babel-node",
@@ -30,6 +30,7 @@
     "nodemon": "^1.17.3",
     "passport": "^0.4.0",
     "passport-facebook": "^2.1.1",
+    "passport-google-oauth20": "^1.0.0",
     "passport-jwt": "^4.0.0",
     "passport-local": "^1.0.0",
     "pg": "^7.4.3",
