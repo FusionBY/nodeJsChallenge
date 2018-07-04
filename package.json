@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "PORT=3050 nodemon ./index.js --exec babel-node",
+    "start": "PORT=3050 DB=mongo NODE_ENV=development nodemon ./index.js --exec babel-node",
     "html-server": "nodemon ./http-servers/html-server --exec babel-node",
     "json-server": "nodemon ./http-servers/json-server --exec babel-node",
     "plain-text-server": "nodemon ./http-servers/plain-text-server --exec babel-node",
@@ -20,11 +20,22 @@
     "babel-preset-env": "^1.6.1",
     "babel-preset-stage-2": "^6.24.1",
     "babel-register": "^6.26.0",
+    "bcrypt": "^2.0.1",
     "crypto-random-string": "^1.0.0",
     "csv-parser": "^1.12.1",
     "express": "^4.16.3",
     "minimist": "^1.2.0",
+    "mongo": "^0.1.0",
+    "mongoose": "^5.1.7",
     "nodemon": "^1.17.3",
+    "passport": "^0.4.0",
+    "passport-facebook": "^2.1.1",
+    "passport-google-oauth20": "^1.0.0",
+    "passport-jwt": "^4.0.0",
+    "passport-local": "^1.0.0",
+    "pg": "^7.4.3",
+    "sequelize": "^5.0.0-beta.8",
+    "sequelize-cmd": "0.0.9",
     "through2": "^2.0.3"
   },
   "devDependencies": {
@@ -33,6 +44,7 @@
     "eslint": "^4.19.1",
     "eslint-config-prettier": "^2.9.0",
     "jest": "^23.1.0",
-    "prettier-eslint-cli": "^4.7.1"
+    "prettier-eslint-cli": "^4.7.1",
+    "sequelize-cli": "^4.0.0"
   }
 }

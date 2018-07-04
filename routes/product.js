@@ -1,9 +1,14 @@
 import { Router } from 'express';
-import controller from 'controllers/product.controller';
+import controllers from 'controllers';
+import lastModifiedDate from 'middlewares/lastModifiedDate';
+
 const router = Router();
 
-router.get('/', controller.getAll).post('/', controller.addProduct);;
-router.get('/:id', controller.getById);
-router.get('/:id/reviews', controller.getReviewsById);
+router
+	.get('/', controllers.getIn('product', 'getAll'))
+	.get('/:id', controllers.getIn('product', 'getById'))
+	.get('/:id/reviews', controllers.getIn('product', 'getReviewsById'))
+	.post('/', lastModifiedDate, controllers.getIn('product', 'addProduct'))
+	.delete('/:id', controllers.getIn('product', 'deleteById'));
 
 export default router;

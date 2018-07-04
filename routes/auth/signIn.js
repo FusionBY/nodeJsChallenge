@@ -3,6 +3,6 @@ import controllers from 'controllers';
 
 const router = Router();
 
-router.get('/', controllers.getIn('user'));
+router.post('/', controllers.getIn('signIn'));
 
 export default router;
