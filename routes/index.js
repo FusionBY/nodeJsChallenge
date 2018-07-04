@@ -13,11 +13,13 @@ import isAuth from 'middlewares/isAuth';
 export default (app) => {
 	app.use('/api/signup', signUp);
 	app.use('/api/signin', signIn);
-	app.use('/api/logout', isAuth, logout);
-	app.use('/api/refreshToken', refreshToken);
-	app.use('/api/users', isAuth, users);
-	app.use('/api/products', isAuth, product);
 	app.use('/api/auth/facebook', facebook);
 	app.use('/api/auth/google', google);
 	app.use('/api/city', city);
+
+	app.use('/api', isAuth);
+	app.use('/api/logout', logout);
+	app.use('/api/refreshToken', refreshToken);
+	app.use('/api/users', users);
+	app.use('/api/products', product);
 };
