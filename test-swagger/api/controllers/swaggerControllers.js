@@ -14,7 +14,6 @@ function getCity (req, res) {
 }
 
 function postCity (req, res) {
-	console.log(req.body);
 	var uri = 'http://localhost:3050/api/city';
 	request.post(uri).form(req.body).pipe(res);
 }
