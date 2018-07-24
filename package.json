@@ -8,7 +8,7 @@
     "html-server": "nodemon ./http-servers/html-server --exec babel-node",
     "json-server": "nodemon ./http-servers/json-server --exec babel-node",
     "plain-text-server": "nodemon ./http-servers/plain-text-server --exec babel-node",
-    "echo-server": "nodemon ./http-servers/echo-server --exec babel-node",
+	"echo-server": "nodemon ./http-servers/echo-server --exec babel-node",
     "test": "jest"
   },
   "keywords": [],
@@ -45,6 +45,7 @@
     "eslint-config-prettier": "^2.9.0",
     "jest": "^23.1.0",
     "prettier-eslint-cli": "^4.7.1",
-    "sequelize-cli": "^4.0.0"
+    "sequelize-cli": "^4.0.0",
+    "swagger": "^0.7.5"
   }
 }

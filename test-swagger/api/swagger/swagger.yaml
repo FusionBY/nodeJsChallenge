@@ -1,0 +1,251 @@
+swagger: '2.0'
+info:
+  version: '1.0.0'
+  title: NodeJS 2018
+  description: REST API Documentation for NodeJS 2018 Training
+  # during dev, should point to your local machine
+host: localhost:10010
+# basePath prefixes all resource paths
+basePath: /
+#
+schemes:
+  # tip: remove http to make production-grade
+  - http
+  - https
+# format of bodies a client can send (Content-Type)
+consumes:
+  - application/json
+# format of the responses to the client (Accepts)
+produces:
+  - application/json
+
+paths:
+  /api/signup:
+    post:
+      description: return user with credentials
+      parameters:
+        - name: signup
+          in: body
+          description: creates a new user in our database
+          schema:
+            type: object
+            required:
+              - username
+              - password
+            properties:
+              username:
+                type: string
+              password:
+                type: string
+      responses:
+        200:
+          description: Successfull signUp
+          schema:
+            type: object
+            properties:
+              status:
+                type: number
+              data:
+                type: object
+              token:
+                type: object
+        500:
+          $ref: '#/responses/500DefaultError'
+  /api/signin:
+    post:
+      description: return user with credentials
+      parameters:
+        - name: signIn
+          in: body
+          description: authentication
+          schema:
+            type: object
+            required:
+              - username
+              - password
+            properties:
+              username:
+                type: string
+              password:
+                type: string
+      responses:
+        200:
+          description: Successfull signIn
+          schema:
+            type: object
+            properties:
+              status:
+                type: number
+              data:
+                type: object
+              token:
+                type: object
+        404:
+          $ref: '#/responses/404Error'
+        500:
+          $ref: '#/responses/500Error'
+  /artists/api/{provider}:
+    get:
+      description: get facebook, google provider as the parameter
+      parameters:
+        - name: provider
+          in: path
+          type: string
+          required: true
+
+      responses:
+        200:
+          description: Successfully returned an user
+          schema:
+            type: object
+            properties:
+              status:
+                type: number
+              user:
+                type: object
+              token:
+                type: object
+        404:
+          $ref: '#/responses/404Error'
+        500:
+          $ref: '#/responses/500Error'
+  /api/city:
+    x-swagger-router-controller: swaggerControllers
+    get:
+      operationId: getCity
+      description: get all cities from DB
+      responses:
+        200:
+          description: return all cities
+          schema:
+            type: object
+            properties:
+              status:
+                type: number
+              data:
+                type: object
+              message:
+                type: string
+        500:
+          $ref: '#/responses/500DefaultError'
+    post:
+      operationId: postCity
+      description: add new city to DB
+      parameters:
+        - name: city_Model
+          in: body
+          description: city Model
+          schema:
+            $ref: '#/definitions/City'
+      responses:
+        200:
+          description: Successfull add
+          schema:
+            type: object
+            properties:
+              status:
+                type: number
+              data:
+                type: object
+              messge:
+                type: string
+        500:
+          $ref: '#/responses/500Error'
+  /api/cuty/{id}:
+    put:
+      description: update or create new city
+      parameters:
+        - name: id
+          in: path
+          type: number
+          required: true
+        - name: city_Model
+          in: body
+          description: city Model
+          schema:
+             $ref: '#/definitions/City'
+      responses:
+        200:
+          description: Successfull put
+          schema:
+            type: object
+            properties:
+              status:
+                type: number
+              data:
+                type: object
+              messge:
+                type: string
+        500:
+          $ref: '#/responses/500Error'
+    delete:
+      description: remove city
+      parameters:
+        - name: id
+          in: path
+          type: number
+          required: true
+      responses:
+        200:
+          description: Successfull remove
+          schema:
+            type: object
+            properties:
+              status:
+                type: number
+              messge:
+                type: string
+        500:
+          $ref: '#/responses/500Error'
+  /swagger:
+    x-swagger-pipe: swagger_raw
+
+# responses
+responses:
+  500DefaultError:
+    description: Invalid request
+    schema:
+      type: object
+      properties:
+        message:
+          type: string
+  500Error:
+    description: Invalid request
+    schema:
+      type: object
+      properties:
+        code:
+          type: number
+        data:
+          type: object
+        message:
+          type: string
+        err:
+          type: object
+  404Error:
+    description: user not found
+    schema:
+      type: object
+      properties:
+        message:
+          type: string
+        data:
+          type: string
+
+#Schema
+definitions:
+  City:
+    type: object
+    required:
+      - capital
+    properties:
+      name:
+        type: string
+      county:
+        type: string
+      capital:
+        type: string
+      location:
+        type: object
+      lastModifiedDate:
+        type: object
