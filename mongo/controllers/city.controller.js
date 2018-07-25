@@ -10,7 +10,7 @@ export default {
 		}
  	},
 	async add (req, res, next) {
-		const newCity = new CityModel(...req.body);
+		const newCity = new CityModel({ ...req.body });
 		try {
 			const city = await newCity.save();
 			res.status(200).json({ status: 200, data: city, message: 'success' });
